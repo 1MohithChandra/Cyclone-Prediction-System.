@@ -1,6 +1,6 @@
-// ==========================================
+// ----------------------------------------
 // PAGE LOAD ANIMATION
-// ==========================================
+// ----------------------------------------
 
 gsap.from(".fade-in", {
     y: 15,
@@ -11,96 +11,134 @@ gsap.from(".fade-in", {
 });
 
 
-// ==========================================
-// FORM SUBMISSION
-// ==========================================
+// ----------------------------------------
+// BACKEND API URL
+// ----------------------------------------
+
+const API_URL =
+    "https://cyclone-prediction-system-backend.vercel.app";
+
+
+// ----------------------------------------
+// PREDICTION FORM
+// ----------------------------------------
 
 document
     .getElementById("prediction-form")
-    .addEventListener("submit", async function (e) {
-
-        // Prevent page refresh
-        e.preventDefault();
+    .addEventListener("submit", async (event) => {
 
 
-        const btn =
-            document.getElementById("submit-btn");
+        // Prevent page reload
+
+        event.preventDefault();
+
+
+        // Get submit button
+
+        const submitButton =
+            document.getElementById(
+                "submit-btn"
+            );
 
 
         // Change button text
-        btn.textContent = "Processing...";
+
+        submitButton.textContent =
+            "Processing...";
 
 
-        // Disable button while processing
-        btn.disabled = true;
+        // Disable button
+
+        submitButton.disabled =
+            true;
 
 
-        // ==========================================
-        // CREATE PAYLOAD FOR BACKEND
-        // ==========================================
+        // ----------------------------------------
+        // CREATE REQUEST DATA
+        // ----------------------------------------
 
         const payload = {
 
+
             Sea_Surface_Temperature:
+
                 parseFloat(
                     document
                         .getElementById("sst")
                         .value
                 ),
 
+
             Atmospheric_Pressure:
+
                 parseFloat(
                     document
                         .getElementById("pressure")
                         .value
                 ),
 
+
             Humidity:
+
                 parseFloat(
                     document
                         .getElementById("humidity")
                         .value
                 ),
 
+
             Wind_Shear:
+
                 parseFloat(
                     document
                         .getElementById("shear")
                         .value
                 ),
 
+
             Vorticity:
+
                 parseFloat(
                     document
                         .getElementById("vorticity")
                         .value
                 ),
 
+
             Latitude:
+
                 parseFloat(
                     document
                         .getElementById("lat")
                         .value
                 ),
 
+
             Ocean_Depth:
+
                 parseFloat(
                     document
                         .getElementById("depth")
                         .value
                 ),
 
+
             Proximity_to_Coastline:
+
                 parseFloat(
                     document
                         .getElementById("coast")
                         .value
                 ),
 
+
             Pre_existing_Disturbance:
+
                 parseInt(
                     document
-                        .getElementById("disturbance")
+                        .getElementById(
+                            "disturbance"
+                        )
                         .value
                 )
 
@@ -109,83 +147,121 @@ document
 
         try {
 
-            // ==========================================
-            // CALL FASTAPI BACKEND
-            // ==========================================
+
+            // ----------------------------------------
+            // SEND DATA TO BACKEND
+            // ----------------------------------------
 
             const response =
                 await fetch(
-                    "http://127.0.0.1:8000/predict",
+
+                    `${API_URL}/predict`,
+
                     {
-                        method: "POST",
+
+                        method:
+                            "POST",
+
 
                         headers: {
+
                             "Content-Type":
                                 "application/json"
+
                         },
 
+
                         body:
-                            JSON.stringify(payload)
+
+                            JSON.stringify(
+                                payload
+                            )
+
                     }
+
                 );
 
 
-            // Check for backend error
+            // ----------------------------------------
+            // CHECK RESPONSE
+            // ----------------------------------------
+
             if (!response.ok) {
 
+
+                const errorMessage =
+                    await response.text();
+
+
                 throw new Error(
-                    "Backend connection failed"
+
+                    `Backend Error: ${response.status}
+
+${errorMessage}`
+
                 );
 
             }
 
 
-            // Get backend response
+            // ----------------------------------------
+            // GET BACKEND RESPONSE
+            // ----------------------------------------
+
             const data =
                 await response.json();
 
 
-            // Display prediction
-            displayResults(data);
+            // ----------------------------------------
+            // DISPLAY RESULTS
+            // ----------------------------------------
 
-        }
+            displayResults(
+                data
+            );
 
 
-        catch (error) {
+        } catch (error) {
+
 
             console.error(
-                "Prediction error:",
+                "Backend connection error:",
                 error
             );
 
 
             alert(
+
                 "Unable to connect to the backend.\n\n" +
-                "Please make sure the FastAPI server is running."
+
+                "Please check that the FastAPI backend is running " +
+
+                "and that the deployed backend URL is correct."
+
             );
 
-        }
 
+        } finally {
 
-        finally {
 
             // Restore button
-            btn.textContent =
+
+            submitButton.textContent =
                 "Run Prediction Model";
 
-            btn.disabled =
+
+            submitButton.disabled =
                 false;
 
         }
 
+
     });
 
 
-
-
-// ==========================================
-// DISPLAY RESULTS
-// ==========================================
+// ----------------------------------------
+// DISPLAY RESULTS FUNCTION
+// ----------------------------------------
 
 function displayResults(data) {
 
@@ -196,15 +272,18 @@ function displayResults(data) {
         );
 
 
-    // Show result card
+    // ----------------------------------------
+    // SHOW RESULT CARD
+    // ----------------------------------------
+
     resultCard.classList.remove(
         "hidden"
     );
 
 
-    // ==========================================
-    // PREDICTION TITLE
-    // ==========================================
+    // ----------------------------------------
+    // DISPLAY PREDICTION
+    // ----------------------------------------
 
     document
         .getElementById(
@@ -214,9 +293,9 @@ function displayResults(data) {
             data.prediction;
 
 
-    // ==========================================
-    // CLASSIFICATION
-    // ==========================================
+    // ----------------------------------------
+    // DISPLAY CLASSIFICATION
+    // ----------------------------------------
 
     document
         .getElementById(
@@ -226,39 +305,43 @@ function displayResults(data) {
             data.classification;
 
 
-    // ==========================================
-    // CYCLONE PROBABILITY
-    // ==========================================
+    // ----------------------------------------
+    // DISPLAY CYCLONE PROBABILITY
+    // ----------------------------------------
 
     document
         .getElementById(
             "prob-yes"
         )
         .textContent =
+
             Number(
                 data.cyclone_probability
             ).toFixed(2)
+
             + "%";
 
 
-    // ==========================================
-    // NO CYCLONE PROBABILITY
-    // ==========================================
+    // ----------------------------------------
+    // DISPLAY NO CYCLONE PROBABILITY
+    // ----------------------------------------
 
     document
         .getElementById(
             "prob-no"
         )
         .textContent =
+
             Number(
                 data.no_cyclone_probability
             ).toFixed(2)
+
             + "%";
 
 
-    // ==========================================
-    // FEATURE IMPORTANCE
-    // ==========================================
+    // ----------------------------------------
+    // FEATURE IMPORTANCE LIST
+    // ----------------------------------------
 
     const featureList =
         document.getElementById(
@@ -267,201 +350,216 @@ function displayResults(data) {
 
 
     // Clear previous features
-    featureList.innerHTML = "";
+
+    featureList.innerHTML =
+        "";
 
 
-    // Add features
-    if (
-        data.top_important_features &&
-        Array.isArray(
-            data.top_important_features
-        )
-    ) {
+    // ----------------------------------------
+    // ADD NEW FEATURES
+    // ----------------------------------------
 
-        data
-            .top_important_features
-            .forEach(
-                function (feature) {
+    data
+        .top_important_features
+        .forEach(
+            (feature) => {
 
 
-                    const li =
-                        document.createElement(
-                            "li"
-                        );
+                const listItem =
+                    document.createElement(
+                        "li"
+                    );
 
 
-                    const readableName =
-                        feature.feature.replace(
+                // Convert underscores to spaces
+
+                const featureName =
+                    feature
+                        .feature
+                        .replace(
                             /_/g,
                             " "
                         );
 
 
-                    li.textContent =
-                        readableName +
-                        " (" +
-                        Number(
-                            feature.importance
-                        ).toFixed(2) +
-                        "% impact)";
+                listItem.textContent =
+
+                    `${featureName} ` +
+
+                    `(${feature.importance}% impact)`;
 
 
-                    featureList.appendChild(
-                        li
-                    );
-
-                }
-            );
-
-    }
+                featureList.appendChild(
+                    listItem
+                );
 
 
-    // ==========================================
-    // RESULT ANIMATION
-    // ==========================================
+            }
+        );
+
+
+    // ----------------------------------------
+    // ANIMATE RESULT CARD
+    // ----------------------------------------
 
     gsap.fromTo(
 
         resultCard,
 
-        {
-            y: 20,
-            opacity: 0
-        },
 
         {
+
+            y: 20,
+
+            opacity: 0
+
+        },
+
+
+        {
+
             y: 0,
+
             opacity: 1,
+
             duration: 0.5,
+
             ease: "power2.out"
+
         }
 
     );
 
 
-    // Scroll to result
-    setTimeout(
-        function () {
+    // ----------------------------------------
+    // SCROLL TO RESULTS
+    // ----------------------------------------
 
-            resultCard.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
-            });
+    resultCard.scrollIntoView({
 
-        },
-        200
-    );
+        behavior:
+            "smooth",
+
+        block:
+            "start"
+
+    });
+
 
 }
 
 
-
-
-// ==========================================
+// ----------------------------------------
 // RESET BUTTON
-// ==========================================
+// ----------------------------------------
 
 document
     .getElementById("reset-btn")
     .addEventListener(
         "click",
-        function () {
+        () => {
 
 
-            // ==========================================
-            // CLEAR ALL INPUT FIELDS
-            // ==========================================
+            // Clear SST
 
             document
-                .querySelectorAll(
-                    "#prediction-form input"
+                .getElementById(
+                    "sst"
                 )
-                .forEach(
-                    function (input) {
-
-                        input.value = "";
-
-                    }
-                );
+                .value =
+                    "";
 
 
-            // ==========================================
-            // RESET DISTURBANCE DROPDOWN
-            // ==========================================
+            // Clear Pressure
+
+            document
+                .getElementById(
+                    "pressure"
+                )
+                .value =
+                    "";
+
+
+            // Clear Humidity
+
+            document
+                .getElementById(
+                    "humidity"
+                )
+                .value =
+                    "";
+
+
+            // Clear Wind Shear
+
+            document
+                .getElementById(
+                    "shear"
+                )
+                .value =
+                    "";
+
+
+            // Clear Vorticity
+
+            document
+                .getElementById(
+                    "vorticity"
+                )
+                .value =
+                    "";
+
+
+            // Clear Latitude
+
+            document
+                .getElementById(
+                    "lat"
+                )
+                .value =
+                    "";
+
+
+            // Clear Ocean Depth
+
+            document
+                .getElementById(
+                    "depth"
+                )
+                .value =
+                    "";
+
+
+            // Clear Coast Proximity
+
+            document
+                .getElementById(
+                    "coast"
+                )
+                .value =
+                    "";
+
+
+            // Reset disturbance dropdown
 
             document
                 .getElementById(
                     "disturbance"
                 )
-                .value =
-                    "1";
+                .selectedIndex =
+                    0;
 
 
-            // ==========================================
-            // HIDE RESULT CARD
-            // ==========================================
+            // Hide results
 
-            const resultCard =
-                document.getElementById(
+            document
+                .getElementById(
                     "result-card"
+                )
+                .classList.add(
+                    "hidden"
                 );
 
-
-            resultCard.classList.add(
-                "hidden"
-            );
-
-
-            // ==========================================
-            // CLEAR RESULT CONTENT
-            // ==========================================
-
-            document
-                .getElementById(
-                    "result-title"
-                )
-                .textContent =
-                    "";
-
-
-            document
-                .getElementById(
-                    "result-classification"
-                )
-                .textContent =
-                    "";
-
-
-            document
-                .getElementById(
-                    "prob-yes"
-                )
-                .textContent =
-                    "";
-
-
-            document
-                .getElementById(
-                    "prob-no"
-                )
-                .textContent =
-                    "";
-
-
-            document
-                .getElementById(
-                    "top-features"
-                )
-                .innerHTML =
-                    "";
-
-
-            // Focus first field
-            document
-                .getElementById(
-                    "sst"
-                )
-                .focus();
 
         }
     );

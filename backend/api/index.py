@@ -1,44 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
 import pandas as pd
 import joblib
 import os
 
 
 # -----------------------------------
-# CREATE FASTAPI APPLICATION
-# -----------------------------------
-
-app = FastAPI(
-    title="Cyclone Prediction API",
-    description="AI/ML API for identification, classification and prediction of tropical cyclone patterns",
-    version="1.0.0"
-)
-
-
-# -----------------------------------
-# ENABLE CORS
-# -----------------------------------
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-# -----------------------------------
 # GET BACKEND DIRECTORY
 # -----------------------------------
-
-# Current file:
-# backend/api/index.py
-#
-# We go one folder back:
-# backend/
 
 BASE_DIR = os.path.dirname(
     os.path.dirname(
@@ -48,27 +19,63 @@ BASE_DIR = os.path.dirname(
 
 
 # -----------------------------------
+# CREATE FASTAPI APPLICATION
+# -----------------------------------
+
+app = FastAPI(
+    title="Cyclone Prediction API",
+    description=(
+        "AI/ML API for identification, classification "
+        "and prediction of tropical cyclone patterns"
+    )
+)
+
+
+# -----------------------------------
+# ENABLE CORS
+# -----------------------------------
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+
+        # Replace this with your exact frontend Vercel URL
+        "https://cyclone-prediction-system.vercel.app"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# -----------------------------------
 # LOAD TRAINED MODEL
 # -----------------------------------
 
-MODEL_PATH = os.path.join(
+model_path = os.path.join(
     BASE_DIR,
     "cyclone_model.pkl"
 )
 
-model = joblib.load(MODEL_PATH)
+model = joblib.load(
+    model_path
+)
 
 
 # -----------------------------------
 # LOAD FEATURE INFORMATION
 # -----------------------------------
 
-FEATURE_INFO_PATH = os.path.join(
+feature_info_path = os.path.join(
     BASE_DIR,
     "feature_info.pkl"
 )
 
-feature_info = joblib.load(FEATURE_INFO_PATH)
+feature_info = joblib.load(
+    feature_info_path
+)
 
 
 # -----------------------------------
@@ -78,13 +85,21 @@ feature_info = joblib.load(FEATURE_INFO_PATH)
 class CycloneInput(BaseModel):
 
     Sea_Surface_Temperature: float
+
     Atmospheric_Pressure: float
+
     Humidity: float
+
     Wind_Shear: float
+
     Vorticity: float
+
     Latitude: float
+
     Ocean_Depth: float
+
     Proximity_to_Coastline: float
+
     Pre_existing_Disturbance: int
 
 
@@ -96,21 +111,11 @@ class CycloneInput(BaseModel):
 def home():
 
     return {
-        "message": "Cyclone Prediction API is running successfully",
-        "status": "online"
-    }
+        "message":
+            "Cyclone Prediction API is running successfully",
 
-
-# -----------------------------------
-# HEALTH CHECK ROUTE
-# -----------------------------------
-
-@app.get("/health")
-def health_check():
-
-    return {
-        "status": "healthy",
-        "model_loaded": True
+        "status":
+            "online"
     }
 
 
@@ -165,7 +170,6 @@ def predict_cyclone(data: CycloneInput):
 
             "Pre_existing_Disturbance":
                 data.Pre_existing_Disturbance
-
         }
     ])
 
@@ -187,10 +191,6 @@ def predict_cyclone(data: CycloneInput):
         input_data
     )[0]
 
-
-    # -----------------------------------
-    # PROBABILITY VALUES
-    # -----------------------------------
 
     no_cyclone_probability = round(
         float(probabilities[0]) * 100,
@@ -223,26 +223,36 @@ def predict_cyclone(data: CycloneInput):
 
     if prediction == 0:
 
-        classification = "No Cyclone Pattern"
+        classification = (
+            "No Cyclone Pattern"
+        )
 
     elif cyclone_probability >= 80:
 
-        classification = "Strong Cyclone Pattern"
+        classification = (
+            "Strong Cyclone Pattern"
+        )
 
     elif cyclone_probability >= 60:
 
-        classification = "Developing Cyclone Pattern"
+        classification = (
+            "Developing Cyclone Pattern"
+        )
 
     else:
 
-        classification = "Weak Cyclone Pattern"
+        classification = (
+            "Weak Cyclone Pattern"
+        )
 
 
     # -----------------------------------
     # FEATURE IMPORTANCE
     # -----------------------------------
 
-    importance_values = model.feature_importances_
+    importance_values = (
+        model.feature_importances_
+    )
 
 
     feature_importance = []
@@ -251,24 +261,23 @@ def predict_cyclone(data: CycloneInput):
     for feature, importance in zip(
 
         model.feature_names_in_,
+
         importance_values
 
     ):
 
-        feature_importance.append(
+        feature_importance.append({
 
-            {
+            "feature":
+                feature,
 
-                "feature": feature,
-
-                "importance": round(
+            "importance":
+                round(
                     float(importance) * 100,
                     2
                 )
 
-            }
-
-        )
+        })
 
 
     # -----------------------------------
@@ -279,7 +288,8 @@ def predict_cyclone(data: CycloneInput):
 
         feature_importance,
 
-        key=lambda x: x["importance"],
+        key=lambda x:
+            x["importance"],
 
         reverse=True
 
@@ -290,7 +300,9 @@ def predict_cyclone(data: CycloneInput):
     # GET TOP 5 FEATURES
     # -----------------------------------
 
-    top_important_features = feature_importance[:5]
+    top_important_features = (
+        feature_importance[:5]
+    )
 
 
     # -----------------------------------
@@ -299,19 +311,24 @@ def predict_cyclone(data: CycloneInput):
 
     return {
 
-        "prediction": result,
+        "prediction":
+            result,
 
-        "classification": classification,
+        "classification":
+            classification,
 
-        "cyclone_probability": cyclone_probability,
+        "cyclone_probability":
+            cyclone_probability,
 
-        "no_cyclone_probability": no_cyclone_probability,
+        "no_cyclone_probability":
+            no_cyclone_probability,
 
-        "top_important_features": top_important_features,
+        "top_important_features":
+            top_important_features,
 
-        "data_sources": feature_info.get(
-            "data_sources",
-            {}
-        )
+        "data_sources":
+            feature_info[
+                "data_sources"
+            ]
 
     }
