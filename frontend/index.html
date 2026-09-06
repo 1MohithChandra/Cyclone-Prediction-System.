@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cyclone Prediction System</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- ============================= -->
+    <!-- HEADER -->
+    <!-- ============================= -->
+
+    <header>
+
+        <h1>🌪️ Cyclone Prediction System</h1>
+
+        <p>
+            AI/ML-based identification, classification and prediction
+            of tropical cyclone patterns.
+        </p>
+
+    </header>
+
+
+
+    <main>
+
+
+        <!-- ============================= -->
+        <!-- INPUT FORM -->
+        <!-- ============================= -->
+
+        <section class="card">
+
+            <h2>Environmental Conditions</h2>
+
+
+            <form id="predictionForm">
+
+
+                <div class="input-grid">
+
+
+                    <!-- Sea Surface Temperature -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Sea Surface Temperature (°C)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Sea_Surface_Temperature"
+                            step="any"
+                            placeholder="Example: 28"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Atmospheric Pressure -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Atmospheric Pressure (hPa)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Atmospheric_Pressure"
+                            step="any"
+                            placeholder="Example: 1000"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Humidity -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Humidity (%)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Humidity"
+                            step="any"
+                            placeholder="Example: 85"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Wind Shear -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Wind Shear
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Wind_Shear"
+                            step="any"
+                            placeholder="Example: 10"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Vorticity -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Vorticity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Vorticity"
+                            step="any"
+                            placeholder="Example: 0.0001"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Latitude -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Latitude
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Latitude"
+                            step="any"
+                            placeholder="Example: 15"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Ocean Depth -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Ocean Depth (m)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Ocean_Depth"
+                            step="any"
+                            placeholder="Example: 3000"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Proximity to Coastline -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Proximity to Coastline
+                        </label>
+
+                        <input
+                            type="number"
+                            id="Proximity_to_Coastline"
+                            step="any"
+                            placeholder="Example: 1"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- Pre-existing Disturbance -->
+
+                    <div class="input-group">
+
+                        <label>
+                            Pre-existing Disturbance
+                        </label>
+
+                        <select
+                            id="Pre_existing_Disturbance"
+                            required
+                        >
+
+                            <option value="1">
+                                Yes
+                            </option>
+
+                            <option value="0">
+                                No
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- ERROR MESSAGE -->
+
+                <p
+                    id="errorMessage"
+                    class="error-message"
+                ></p>
+
+
+
+                <!-- BUTTONS -->
+
+                <div class="button-container">
+
+
+                    <button
+                        type="submit"
+                        id="predictButton"
+                        class="predict-button"
+                    >
+
+                        Predict Cyclone
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="resetButton"
+                        class="reset-button"
+                    >
+
+                        Reset
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- PREDICTION RESULT -->
+        <!-- ============================= -->
+
+        <section
+            id="resultSection"
+            class="card result-card hidden"
+        >
+
+
+            <h2>
+                Prediction Result
+            </h2>
+
+
+
+            <div
+                id="predictionText"
+                class="prediction-text"
+            >
+            </div>
+
+
+
+            <div
+                id="classificationText"
+                class="classification-text"
+            >
+            </div>
+
+
+
+            <!-- Cyclone Probability -->
+
+            <div class="probability-section">
+
+
+                <div class="probability-header">
+
+                    <span>
+                        Cyclone Probability
+                    </span>
+
+                    <span
+                        id="cycloneProbabilityText"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        id="cycloneBar"
+                        class="progress-bar cyclone-bar"
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- No Cyclone Probability -->
+
+            <div class="probability-section">
+
+
+                <div class="probability-header">
+
+                    <span>
+                        No Cyclone Probability
+                    </span>
+
+                    <span
+                        id="noCycloneProbabilityText"
+                    >
+                    </span>
+
+                </div>
+
+
+                <div class="progress-background">
+
+                    <div
+                        id="noCycloneBar"
+                        class="progress-bar no-cyclone-bar"
+                    ></div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- AI ANALYSIS -->
+        <!-- ============================= -->
+
+        <section
+            id="analysisSection"
+            class="card hidden"
+        >
+
+
+            <h2>
+                🧠 AI Analysis
+            </h2>
+
+
+            <p class="section-description">
+
+                Top environmental factors influencing
+                the AI/ML model prediction.
+
+            </p>
+
+
+
+            <div
+                id="featureImportanceContainer"
+            >
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- DATA INTELLIGENCE -->
+        <!-- ============================= -->
+
+        <section
+            id="dataSection"
+            class="card hidden"
+        >
+
+
+            <h2>
+                🛰️ Data Intelligence Categories
+            </h2>
+
+
+            <p class="section-description">
+
+                Environmental and geographical data
+                categories used by the AI model.
+
+            </p>
+
+
+
+            <div
+                id="dataCategories"
+                class="category-grid"
+            >
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ============================= -->
+        <!-- MODEL INFORMATION -->
+        <!-- ============================= -->
+
+        <section class="card model-card">
+
+
+            <h2>
+                🤖 Model Information
+            </h2>
+
+
+            <p class="section-description">
+
+                Technical information about the
+                machine learning model used in this system.
+
+            </p>
+
+
+
+            <div class="model-info-grid">
+
+
+                <div class="model-info-item">
+
+                    <h3>
+                        Machine Learning Algorithm
+                    </h3>
+
+                    <p>
+                        Random Forest Classifier
+                    </p>
+
+                </div>
+
+
+
+                <div class="model-info-item">
+
+                    <h3>
+                        Input Features
+                    </h3>
+
+                    <p>
+                        9 Environmental and Geographical Parameters
+                    </p>
+
+                </div>
+
+
+
+                <div class="model-info-item">
+
+                    <h3>
+                        Prediction Classes
+                    </h3>
+
+                    <p>
+                        Cyclone Detected / No Cyclone Detected
+                    </p>
+
+                </div>
+
+
+
+                <div class="model-info-item">
+
+                    <h3>
+                        Model Output
+                    </h3>
+
+                    <p>
+                        Classification with Prediction Probability
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="model-note">
+
+                <strong>Note:</strong>
+
+                The prediction generated by this system
+                is based on the trained machine learning
+                dataset and should be interpreted as a
+                model prediction rather than an official
+                meteorological warning.
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <script
+        src="script.js"
+    ></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,716 @@
+/* ========================================= */
+/* GENERAL */
+/* ========================================= */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eaf0f8,
+            #d9e2ef
+        );
+
+    color: #2c3e50;
+
+}
+
+
+
+/* ========================================= */
+/* HEADER */
+/* ========================================= */
+
+header {
+
+    text-align: center;
+
+    padding: 40px 20px;
+
+    border-bottom:
+        1px solid #cfd8e3;
+
+}
+
+
+header h1 {
+
+    margin: 0;
+
+    font-size: 40px;
+
+    color: #2c3e50;
+
+}
+
+
+header p {
+
+    margin-top: 12px;
+
+    font-size: 17px;
+
+    color: #56697d;
+
+}
+
+
+
+/* ========================================= */
+/* MAIN */
+/* ========================================= */
+
+main {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding:
+
+        30px 20px
+        60px 20px;
+
+}
+
+
+
+/* ========================================= */
+/* CARD */
+/* ========================================= */
+
+.card {
+
+    background: #ffffff;
+
+    margin-bottom: 25px;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    box-shadow:
+
+        0 10px 30px
+        rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+
+}
+
+
+.card h2 {
+
+    margin-top: 0;
+
+    font-size: 28px;
+
+    color: #2c3e50;
+
+}
+
+
+
+/* ========================================= */
+/* INPUT GRID */
+/* ========================================= */
+
+.input-grid {
+
+    display: grid;
+
+    grid-template-columns:
+
+        repeat(
+            3,
+            1fr
+        );
+
+    gap: 22px;
+
+}
+
+
+.input-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+.input-group label {
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+
+    font-size: 16px;
+
+}
+
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border:
+
+        1px solid
+        #c5cfdb;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    outline: none;
+
+    transition:
+
+        0.2s;
+
+}
+
+
+input:focus,
+select:focus {
+
+    border-color:
+
+        #3566c4;
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(
+            53,
+            102,
+            196,
+            0.12
+        );
+
+}
+
+
+
+/* ========================================= */
+/* BUTTONS */
+/* ========================================= */
+
+.button-container {
+
+    display: flex;
+
+    gap: 15px;
+
+    margin-top: 25px;
+
+}
+
+
+.predict-button {
+
+    flex: 1;
+
+    padding: 16px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #315db7,
+            #3c6bd1
+        );
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.predict-button:hover {
+
+    opacity: 0.92;
+
+}
+
+
+.reset-button {
+
+    padding:
+
+        16px 35px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #6c757d;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.reset-button:hover {
+
+    background: #555d65;
+
+}
+
+
+
+/* ========================================= */
+/* ERROR */
+/* ========================================= */
+
+.error-message {
+
+    color: #d63031;
+
+    font-weight: bold;
+
+    margin-top: 15px;
+
+}
+
+
+
+/* ========================================= */
+/* RESULT */
+/* ========================================= */
+
+.result-card {
+
+    text-align: center;
+
+}
+
+
+.prediction-text {
+
+    font-size: 30px;
+
+    font-weight: bold;
+
+    margin:
+
+        20px 0
+        8px 0;
+
+}
+
+
+.classification-text {
+
+    font-size: 19px;
+
+    color: #315db7;
+
+    margin-bottom: 30px;
+
+}
+
+
+
+/* ========================================= */
+/* PROBABILITY */
+/* ========================================= */
+
+.probability-section {
+
+    text-align: left;
+
+    margin-top: 25px;
+
+}
+
+
+.probability-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+
+}
+
+
+.progress-background {
+
+    width: 100%;
+
+    height: 22px;
+
+    background: #dbe2ea;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+
+.progress-bar {
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    transition:
+
+        width 0.8s ease;
+
+}
+
+
+.cyclone-bar {
+
+    background: #f44343;
+
+}
+
+
+.no-cyclone-bar {
+
+    background: #27ae60;
+
+}
+
+
+
+/* ========================================= */
+/* SECTION DESCRIPTION */
+/* ========================================= */
+
+.section-description {
+
+    color: #607080;
+
+    font-size: 16px;
+
+    margin-bottom: 25px;
+
+}
+
+
+
+/* ========================================= */
+/* FEATURE IMPORTANCE */
+/* ========================================= */
+
+.feature-item {
+
+    margin-bottom: 20px;
+
+}
+
+
+.feature-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    font-weight: bold;
+
+    margin-bottom: 8px;
+
+}
+
+
+.feature-background {
+
+    width: 100%;
+
+    height: 18px;
+
+    background: #dbe2ea;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+
+.feature-bar {
+
+    height: 100%;
+
+    border-radius: 20px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #315db7,
+            #46a8d5
+        );
+
+}
+
+
+
+/* ========================================= */
+/* DATA CATEGORIES */
+/* ========================================= */
+
+.category-grid {
+
+    display: grid;
+
+    grid-template-columns:
+
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 20px;
+
+}
+
+
+.category-card {
+
+    border:
+
+        1px solid
+        #d3dce8;
+
+    padding: 20px;
+
+    border-radius: 15px;
+
+    background: #f8fafc;
+
+}
+
+
+.category-card h3 {
+
+    margin-top: 0;
+
+    color: #315b9c;
+
+    text-transform: capitalize;
+
+}
+
+
+.category-card ul {
+
+    padding-left: 20px;
+
+    margin-bottom: 0;
+
+}
+
+
+.category-card li {
+
+    margin-bottom: 8px;
+
+}
+
+
+
+/* ========================================= */
+/* MODEL INFORMATION */
+/* ========================================= */
+
+.model-info-grid {
+
+    display: grid;
+
+    grid-template-columns:
+
+        repeat(
+            2,
+            1fr
+        );
+
+    gap: 20px;
+
+}
+
+
+.model-info-item {
+
+    padding: 20px;
+
+    border-radius: 14px;
+
+    background: #f5f8fc;
+
+    border:
+
+        1px solid
+        #dce4ef;
+
+}
+
+
+.model-info-item h3 {
+
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+    color: #315b9c;
+
+    font-size: 18px;
+
+}
+
+
+.model-info-item p {
+
+    margin-bottom: 0;
+
+    color: #536476;
+
+    line-height: 1.6;
+
+}
+
+
+.model-note {
+
+    margin-top: 25px;
+
+    padding: 18px;
+
+    border-left:
+
+        5px solid
+        #3566c4;
+
+    background: #eef4ff;
+
+    color: #40556d;
+
+    border-radius: 8px;
+
+    line-height: 1.6;
+
+}
+
+
+
+/* ========================================= */
+/* HIDDEN */
+/* ========================================= */
+
+.hidden {
+
+    display: none;
+
+}
+
+
+
+/* ========================================= */
+/* RESPONSIVE */
+/* ========================================= */
+
+@media
+(
+    max-width: 800px
+) {
+
+    .input-grid {
+
+        grid-template-columns:
+
+            1fr;
+
+    }
+
+
+    .category-grid {
+
+        grid-template-columns:
+
+            1fr;
+
+    }
+
+
+    .model-info-grid {
+
+        grid-template-columns:
+
+            1fr;
+
+    }
+
+
+    .button-container {
+
+        flex-direction: column;
+
+    }
+
+
+    .reset-button {
+
+        width: 100%;
+
+    }
+
+
+    header h1 {
+
+        font-size: 30px;
+
+    }
+
+
+    .card {
+
+        padding: 22px;
+
+    }
+
+}
