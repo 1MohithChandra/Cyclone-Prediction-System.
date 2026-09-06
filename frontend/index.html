@@ -2,241 +2,193 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Cyclone Prediction System</title>
+    <title>Cyclone Prediction Model</title>
+
+    <link rel="stylesheet" href="style.css">
 
     <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap"
         rel="stylesheet"
-        href="style.css"
     >
-
 </head>
-
 
 <body>
 
-
-    <!-- ============================= -->
-    <!-- HEADER -->
-    <!-- ============================= -->
-
-    <header>
-
-        <h1>🌪️ Cyclone Prediction System</h1>
-
-        <p>
-            AI/ML-based identification, classification and prediction
-            of tropical cyclone patterns.
-        </p>
-
-    </header>
+    <!-- Background -->
+    <div class="ambient-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
 
 
+    <!-- Main Dashboard -->
+    <div class="dashboard">
 
-    <main>
+        <!-- Header -->
+        <header class="fade-in">
+
+            <h1>Cyclone Analysis</h1>
+
+            <p>Advanced Meteorological Pattern Recognition</p>
+
+        </header>
 
 
-        <!-- ============================= -->
-        <!-- INPUT FORM -->
-        <!-- ============================= -->
-
-        <section class="card">
-
-            <h2>Environmental Conditions</h2>
+        <main class="fade-in">
 
 
-            <form id="predictionForm">
+            <!-- Prediction Form -->
+            <form id="prediction-form" class="glass-panel">
 
 
                 <div class="input-grid">
 
 
                     <!-- Sea Surface Temperature -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Sea Surface Temperature (°C)
-                        </label>
+                        <label>Sea Surface Temp (°C)</label>
 
                         <input
                             type="number"
-                            id="Sea_Surface_Temperature"
                             step="any"
-                            placeholder="Example: 28"
+                            id="sst"
+                            value="28.5"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Atmospheric Pressure -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Atmospheric Pressure (hPa)
-                        </label>
+                        <label>Pressure (hPa)</label>
 
                         <input
                             type="number"
-                            id="Atmospheric_Pressure"
                             step="any"
-                            placeholder="Example: 1000"
+                            id="pressure"
+                            value="1005"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Humidity -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Humidity (%)
-                        </label>
+                        <label>Humidity (%)</label>
 
                         <input
                             type="number"
-                            id="Humidity"
                             step="any"
-                            placeholder="Example: 85"
+                            id="humidity"
+                            value="80"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Wind Shear -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Wind Shear
-                        </label>
+                        <label>Wind Shear</label>
 
                         <input
                             type="number"
-                            id="Wind_Shear"
                             step="any"
-                            placeholder="Example: 10"
+                            id="shear"
+                            value="15"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Vorticity -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Vorticity
-                        </label>
+                        <label>Vorticity</label>
 
                         <input
                             type="number"
-                            id="Vorticity"
                             step="any"
-                            placeholder="Example: 0.0001"
+                            id="vorticity"
+                            value="0.5"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Latitude -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Latitude
-                        </label>
+                        <label>Latitude</label>
 
                         <input
                             type="number"
-                            id="Latitude"
                             step="any"
-                            placeholder="Example: 15"
+                            id="lat"
+                            value="15.0"
                             required
                         >
 
                     </div>
-
 
 
                     <!-- Ocean Depth -->
+                    <div class="field">
 
-                    <div class="input-group">
-
-                        <label>
-                            Ocean Depth (m)
-                        </label>
+                        <label>Ocean Depth (m)</label>
 
                         <input
                             type="number"
-                            id="Ocean_Depth"
                             step="any"
-                            placeholder="Example: 3000"
+                            id="depth"
+                            value="50"
                             required
                         >
 
                     </div>
 
 
+                    <!-- Proximity to Coast -->
+                    <div class="field">
 
-                    <!-- Proximity to Coastline -->
-
-                    <div class="input-group">
-
-                        <label>
-                            Proximity to Coastline
-                        </label>
+                        <label>Proximity to Coast (km)</label>
 
                         <input
                             type="number"
-                            id="Proximity_to_Coastline"
                             step="any"
-                            placeholder="Example: 1"
+                            id="coast"
+                            value="100"
                             required
                         >
 
                     </div>
 
 
+                    <!-- Prior Disturbance -->
+                    <div class="field">
 
-                    <!-- Pre-existing Disturbance -->
+                        <label>Prior Disturbance</label>
 
-                    <div class="input-group">
+                        <select id="disturbance" required>
 
-                        <label>
-                            Pre-existing Disturbance
-                        </label>
-
-                        <select
-                            id="Pre_existing_Disturbance"
-                            required
-                        >
-
-                            <option value="1">
-                                Yes
+                            <option value="1" selected>
+                                Detected
                             </option>
 
                             <option value="0">
-                                No
+                                None
                             </option>
 
                         </select>
@@ -247,42 +199,25 @@
                 </div>
 
 
-
-                <!-- ERROR MESSAGE -->
-
-                <p
-                    id="errorMessage"
-                    class="error-message"
-                ></p>
-
-
-
-                <!-- BUTTONS -->
-
+                <!-- Buttons -->
                 <div class="button-container">
-
 
                     <button
                         type="submit"
-                        id="predictButton"
-                        class="predict-button"
+                        id="submit-btn"
+                        class="predict-btn"
                     >
-
-                        Predict Cyclone
-
+                        Run Prediction Model
                     </button>
 
 
                     <button
                         type="button"
-                        id="resetButton"
-                        class="reset-button"
+                        id="reset-btn"
+                        class="reset-btn"
                     >
-
                         Reset
-
                     </button>
-
 
                 </div>
 
@@ -290,255 +225,67 @@
             </form>
 
 
-        </section>
-
-
-
-        <!-- ============================= -->
-        <!-- PREDICTION RESULT -->
-        <!-- ============================= -->
-
-        <section
-            id="resultSection"
-            class="card result-card hidden"
-        >
-
-
-            <h2>
-                Prediction Result
-            </h2>
-
-
-
+            <!-- Results -->
             <div
-                id="predictionText"
-                class="prediction-text"
+                id="result-card"
+                class="glass-panel result-panel hidden"
             >
-            </div>
 
 
-
-            <div
-                id="classificationText"
-                class="classification-text"
-            >
-            </div>
+                <!-- Prediction -->
+                <h2 id="result-title"></h2>
 
 
+                <!-- Classification -->
+                <div
+                    class="badge"
+                    id="result-classification"
+                ></div>
 
-            <!-- Cyclone Probability -->
 
-            <div class="probability-section">
+                <!-- Probability -->
+                <div class="metrics">
 
 
-                <div class="probability-header">
+                    <div class="metric-box">
 
-                    <span>
-                        Cyclone Probability
-                    </span>
+                        <span class="label">
+                            Cyclone Probability
+                        </span>
 
-                    <span
-                        id="cycloneProbabilityText"
-                    >
-                    </span>
+                        <span
+                            class="value accent-blue"
+                            id="prob-yes"
+                        ></span>
+
+                    </div>
+
+
+                    <div class="metric-box">
+
+                        <span class="label">
+                            Clear Probability
+                        </span>
+
+                        <span
+                            class="value"
+                            id="prob-no"
+                        ></span>
+
+                    </div>
+
 
                 </div>
 
 
-                <div class="progress-background">
-
-                    <div
-                        id="cycloneBar"
-                        class="progress-bar cyclone-bar"
-                    ></div>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- No Cyclone Probability -->
-
-            <div class="probability-section">
-
-
-                <div class="probability-header">
-
-                    <span>
-                        No Cyclone Probability
-                    </span>
-
-                    <span
-                        id="noCycloneProbabilityText"
-                    >
-                    </span>
-
-                </div>
-
-
-                <div class="progress-background">
-
-                    <div
-                        id="noCycloneBar"
-                        class="progress-bar no-cyclone-bar"
-                    ></div>
-
-                </div>
-
-
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ============================= -->
-        <!-- AI ANALYSIS -->
-        <!-- ============================= -->
-
-        <section
-            id="analysisSection"
-            class="card hidden"
-        >
-
-
-            <h2>
-                🧠 AI Analysis
-            </h2>
-
-
-            <p class="section-description">
-
-                Top environmental factors influencing
-                the AI/ML model prediction.
-
-            </p>
-
-
-
-            <div
-                id="featureImportanceContainer"
-            >
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ============================= -->
-        <!-- DATA INTELLIGENCE -->
-        <!-- ============================= -->
-
-        <section
-            id="dataSection"
-            class="card hidden"
-        >
-
-
-            <h2>
-                🛰️ Data Intelligence Categories
-            </h2>
-
-
-            <p class="section-description">
-
-                Environmental and geographical data
-                categories used by the AI model.
-
-            </p>
-
-
-
-            <div
-                id="dataCategories"
-                class="category-grid"
-            >
-            </div>
-
-
-        </section>
-
-
-
-        <!-- ============================= -->
-        <!-- MODEL INFORMATION -->
-        <!-- ============================= -->
-
-        <section class="card model-card">
-
-
-            <h2>
-                🤖 Model Information
-            </h2>
-
-
-            <p class="section-description">
-
-                Technical information about the
-                machine learning model used in this system.
-
-            </p>
-
-
-
-            <div class="model-info-grid">
-
-
-                <div class="model-info-item">
+                <!-- Feature Importance -->
+                <div class="feature-analysis">
 
                     <h3>
-                        Machine Learning Algorithm
+                        Primary Driving Factors
                     </h3>
 
-                    <p>
-                        Random Forest Classifier
-                    </p>
-
-                </div>
-
-
-
-                <div class="model-info-item">
-
-                    <h3>
-                        Input Features
-                    </h3>
-
-                    <p>
-                        9 Environmental and Geographical Parameters
-                    </p>
-
-                </div>
-
-
-
-                <div class="model-info-item">
-
-                    <h3>
-                        Prediction Classes
-                    </h3>
-
-                    <p>
-                        Cyclone Detected / No Cyclone Detected
-                    </p>
-
-                </div>
-
-
-
-                <div class="model-info-item">
-
-                    <h3>
-                        Model Output
-                    </h3>
-
-                    <p>
-                        Classification with Prediction Probability
-                    </p>
+                    <ul id="top-features"></ul>
 
                 </div>
 
@@ -546,30 +293,19 @@
             </div>
 
 
+        </main>
 
-            <div class="model-note">
-
-                <strong>Note:</strong>
-
-                The prediction generated by this system
-                is based on the trained machine learning
-                dataset and should be interpreted as a
-                model prediction rather than an official
-                meteorological warning.
-
-            </div>
+    </div>
 
 
-        </section>
-
-
-    </main>
-
-
-
+    <!-- Animation Library -->
     <script
-        src="script.js"
+        src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
     ></script>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 
 
 </body>
