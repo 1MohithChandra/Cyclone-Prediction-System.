@@ -12,7 +12,8 @@ import os
 
 app = FastAPI(
     title="Cyclone Prediction API",
-    description="AI/ML API for identification, classification and prediction of tropical cyclone patterns"
+    description="AI/ML API for identification, classification and prediction of tropical cyclone patterns",
+    version="1.0.0"
 )
 
 
@@ -30,34 +31,44 @@ app.add_middleware(
 
 
 # -----------------------------------
-# GET CURRENT DIRECTORY
+# GET BACKEND DIRECTORY
 # -----------------------------------
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Current file:
+# backend/api/index.py
+#
+# We go one folder back:
+# backend/
+
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.abspath(__file__)
+    )
+)
 
 
 # -----------------------------------
 # LOAD TRAINED MODEL
 # -----------------------------------
 
-model_path = os.path.join(
+MODEL_PATH = os.path.join(
     BASE_DIR,
     "cyclone_model.pkl"
 )
 
-model = joblib.load(model_path)
+model = joblib.load(MODEL_PATH)
 
 
 # -----------------------------------
 # LOAD FEATURE INFORMATION
 # -----------------------------------
 
-feature_info_path = os.path.join(
+FEATURE_INFO_PATH = os.path.join(
     BASE_DIR,
     "feature_info.pkl"
 )
 
-feature_info = joblib.load(feature_info_path)
+feature_info = joblib.load(FEATURE_INFO_PATH)
 
 
 # -----------------------------------
@@ -85,7 +96,21 @@ class CycloneInput(BaseModel):
 def home():
 
     return {
-        "message": "Cyclone Prediction API is running successfully"
+        "message": "Cyclone Prediction API is running successfully",
+        "status": "online"
+    }
+
+
+# -----------------------------------
+# HEALTH CHECK ROUTE
+# -----------------------------------
+
+@app.get("/health")
+def health_check():
+
+    return {
+        "status": "healthy",
+        "model_loaded": True
     }
 
 
@@ -111,60 +136,70 @@ def predict_cyclone(data: CycloneInput):
     # CONVERT INPUT INTO DATAFRAME
     # -----------------------------------
 
-    input_data = pd.DataFrame([{
+    input_data = pd.DataFrame([
+        {
 
-        "Sea_Surface_Temperature":
-            data.Sea_Surface_Temperature,
+            "Sea_Surface_Temperature":
+                data.Sea_Surface_Temperature,
 
-        "Atmospheric_Pressure":
-            data.Atmospheric_Pressure,
+            "Atmospheric_Pressure":
+                data.Atmospheric_Pressure,
 
-        "Humidity":
-            data.Humidity,
+            "Humidity":
+                data.Humidity,
 
-        "Wind_Shear":
-            data.Wind_Shear,
+            "Wind_Shear":
+                data.Wind_Shear,
 
-        "Vorticity":
-            data.Vorticity,
+            "Vorticity":
+                data.Vorticity,
 
-        "Latitude":
-            data.Latitude,
+            "Latitude":
+                data.Latitude,
 
-        "Ocean_Depth":
-            data.Ocean_Depth,
+            "Ocean_Depth":
+                data.Ocean_Depth,
 
-        "Proximity_to_Coastline":
-            data.Proximity_to_Coastline,
+            "Proximity_to_Coastline":
+                data.Proximity_to_Coastline,
 
-        "Pre_existing_Disturbance":
-            data.Pre_existing_Disturbance
+            "Pre_existing_Disturbance":
+                data.Pre_existing_Disturbance
 
-    }])
+        }
+    ])
 
 
     # -----------------------------------
     # GET PREDICTION
     # -----------------------------------
 
-    prediction = model.predict(input_data)[0]
+    prediction = model.predict(
+        input_data
+    )[0]
 
 
     # -----------------------------------
     # GET PROBABILITIES
     # -----------------------------------
 
-    probabilities = model.predict_proba(input_data)[0]
+    probabilities = model.predict_proba(
+        input_data
+    )[0]
 
+
+    # -----------------------------------
+    # PROBABILITY VALUES
+    # -----------------------------------
 
     no_cyclone_probability = round(
-        probabilities[0] * 100,
+        float(probabilities[0]) * 100,
         2
     )
 
 
     cyclone_probability = round(
-        probabilities[1] * 100,
+        float(probabilities[1]) * 100,
         2
     )
 
@@ -204,7 +239,7 @@ def predict_cyclone(data: CycloneInput):
 
 
     # -----------------------------------
-    # GET FEATURE IMPORTANCE
+    # FEATURE IMPORTANCE
     # -----------------------------------
 
     importance_values = model.feature_importances_
@@ -214,20 +249,26 @@ def predict_cyclone(data: CycloneInput):
 
 
     for feature, importance in zip(
+
         model.feature_names_in_,
         importance_values
+
     ):
 
-        feature_importance.append({
+        feature_importance.append(
 
-            "feature": feature,
+            {
 
-            "importance": round(
-                float(importance) * 100,
-                2
-            )
+                "feature": feature,
 
-        })
+                "importance": round(
+                    float(importance) * 100,
+                    2
+                )
+
+            }
+
+        )
 
 
     # -----------------------------------
@@ -268,6 +309,9 @@ def predict_cyclone(data: CycloneInput):
 
         "top_important_features": top_important_features,
 
-        "data_sources": feature_info["data_sources"]
+        "data_sources": feature_info.get(
+            "data_sources",
+            {}
+        )
 
     }
